@@ -1,0 +1,19 @@
+FROM gliderlabs/alpine:edge
+
+RUN apk update && apk --update add haproxy ruby ruby-dev ca-certificates
+
+ADD Gemfile /app/
+ADD Gemfile.lock /app/
+
+RUN apk --update add --virtual build-dependencies ruby-dev build-base && \
+    gem install bundler && \
+    cd /app ; bundle install --without development test && \
+    apk del build-dependencies
+
+ADD . /app
+
+EXPOSE 80 443
+
+WORKDIR /app
+
+CMD ["./run.sh"]
