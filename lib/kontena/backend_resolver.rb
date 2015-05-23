@@ -29,6 +29,7 @@ module Kontena
         resolved_ips = resolve_dns(service)
         debug resolved_ips
         if resolved_ips
+          resolved_ips = resolved_ips.sort_by{ |ip| ip.to_s }
           resolved_backends[service] = resolved_ips.map{|r|
             { ip: r.to_s, port: port }
           }
