@@ -27,7 +27,7 @@ module Kontena
       self.backends.each do |backend|
         service, port = backend.split(':')
         resolved_ips = resolve_dns(service)
-        info resolved_ips
+        debug resolved_ips
         if resolved_ips
           resolved_backends[service] = resolved_ips.map{|r|
             { ip: r.to_s, port: port }
