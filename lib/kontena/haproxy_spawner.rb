@@ -28,7 +28,7 @@ module Kontena
 
     def reload_haproxy
       info 'Reloading haproxy'
-      reload_cmd = @haproxy_cmd + ['-sf', @pid.to_s]
+      reload_cmd = @haproxy_cmd + ['-sf', @current_pid.to_s]
       pid = Process.spawn(reload_cmd.join(' '))
       Process.wait(@current_pid)
       @current_pid = pid
