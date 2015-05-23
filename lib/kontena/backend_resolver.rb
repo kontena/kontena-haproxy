@@ -5,8 +5,6 @@ module Kontena
     include Celluloid::Logger
     include Celluloid::Notifications
 
-    BASE_DNS = '.kontena.local'
-
     attr_reader :interval, :backends, :dns_resolver
 
     def initialize(opts)
@@ -37,6 +35,8 @@ module Kontena
         end
       end
       publish 'backends_resolved', resolved_backends
+    rescue => exc
+      error "Failed to resolve backends: #{exc.message}"
     end
 
     ##
