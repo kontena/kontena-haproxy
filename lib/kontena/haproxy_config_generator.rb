@@ -56,14 +56,14 @@ module Kontena
         frontend << 'reqadd X-Forwarded-Proto:\ https'
       end
 
-      if options[:virtual_hosts]
+      if options[:virtual_hosts] != ''
         vhosts.each do |service, domain|
           id = service.downcase.sub('-', '_')
           frontend << 'acl host_%s hdr(host) -i %s' % [id, domain]
           frontend << 'use_backend %s_cluster if host_%s' % [id, id]
         end
       else
-        frontend << 'default_backend default_service'
+        frontend << 'default_backend default_backend'
       end
       config['frontend default_frontend'] = frontend
     end
