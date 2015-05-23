@@ -71,23 +71,48 @@ describe Kontena::HaproxyConfigGenerator do
   end
 
   describe '#create_frontend' do
-    before(:each) { subject.create_frontend }
-    let(:frontend_config) { subject.config['frontend default_frontend'] }
 
-    it 'sets default frontend to config' do
-      expect(frontend_config).to be_instance_of(Array)
+    context 'with virtual hosts' do
+      before(:each) { subject.create_frontend }
+      let(:frontend_config) { subject.config['frontend default_frontend'] }
+
+      it 'sets default frontend to config' do
+        expect(frontend_config).to be_instance_of(Array)
+      end
+
+      it 'sets frontend bind' do
+        expect(frontend_config).to include('bind 0.0.0.0:80')
+      end
+
+      it 'adds virtualhost frontend configs' do
+        expect(frontend_config).to include('acl host_ghost hdr(host) -i blog.kontena.io')
+        expect(frontend_config).to include('use_backend ghost_cluster if host_ghost')
+
+        expect(frontend_config).to include('acl host_jenkins hdr(host) -i ci.kontena.io')
+        expect(frontend_config).to include('use_backend jenkins_cluster if host_jenkins')
+      end
     end
 
-    it 'sets frontend bind' do
-      expect(frontend_config).to include('bind 0.0.0.0:80')
-    end
+    context 'without virtual hosts' do
+      let(:subject) do
+        described_class.new(
+          frontend_port: '80',
+          maxconn: '4096',
+          mode: 'http',
+          balance: 'roundrobin',
+          polling_interval: 5,
+          virtual_hosts: '',
+          option: %w{ redispatch forwardfor},
+          timeout: ['connect 5000', 'client 50000', 'server 50000']
+        ).wrapped_object
+      end
 
-    it 'adds virtualhost frontend configs' do
-      expect(frontend_config).to include('acl host_ghost hdr(host) -i blog.kontena.io')
-      expect(frontend_config).to include('use_backend ghost_cluster if host_ghost')
+      before(:each) { subject.create_frontend }
+      let(:frontend_config) { subject.config['frontend default_frontend'] }
 
-      expect(frontend_config).to include('acl host_jenkins hdr(host) -i ci.kontena.io')
-      expect(frontend_config).to include('use_backend jenkins_cluster if host_jenkins')
+      it 'sets default_backend if virtualhosts is empty' do
+        expect(frontend_config).to include('default_backend default_backend')
+      end
     end
   end
 
