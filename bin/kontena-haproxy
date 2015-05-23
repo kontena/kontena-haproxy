@@ -13,8 +13,9 @@ SSL = ENV['SSL'] || ''
 POLLING_INTERVAL = (ENV['POLLING_INTERVAL'] || '10').to_i
 VIRTUAL_HOSTS = ENV['VIRTUAL_HOSTS'] || ''
 
-Kontena::HaproxySpawner.new
-Kontena::HaproxyConfigGenerator.new(
+Celluloid.logger.level = (ENV['LOG_LEVEL'] || '1').to_i
+spawner = Kontena::HaproxySpawner.new
+generator = Kontena::HaproxyConfigGenerator.new(
   frontend_port: FRONTEND_PORT,
   maxconn: MAXCONN,
   mode: MODE,
@@ -25,10 +26,11 @@ Kontena::HaproxyConfigGenerator.new(
   virtual_hosts: VIRTUAL_HOSTS,
   ssl: SSL
 )
-Kontena::HaproxyConfigWriter.new
-Kontena::BackendResolver.new(
+writer = Kontena::HaproxyConfigWriter.new
+resolver = Kontena::BackendResolver.new(
   backends: BACKENDS,
   interval: POLLING_INTERVAL
-).async.start!
+)
+resolver.async.start!
 
 sleep
