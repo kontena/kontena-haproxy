@@ -14,8 +14,8 @@ POLLING_INTERVAL = (ENV['POLLING_INTERVAL'] || '10').to_i
 VIRTUAL_HOSTS = ENV['VIRTUAL_HOSTS'] || ''
 
 Celluloid.logger.level = (ENV['LOG_LEVEL'] || '1').to_i
-spawner = Kontena::HaproxySpawner.new
-generator = Kontena::HaproxyConfigGenerator.new(
+spawner_supervisor = Kontena::HaproxySpawner.supervise
+config_generator_supervisor = Kontena::HaproxyConfigGenerator.supervise(
   frontend_port: FRONTEND_PORT,
   maxconn: MAXCONN,
   mode: MODE,
@@ -26,11 +26,11 @@ generator = Kontena::HaproxyConfigGenerator.new(
   virtual_hosts: VIRTUAL_HOSTS,
   ssl: SSL
 )
-writer = Kontena::HaproxyConfigWriter.new
-resolver = Kontena::BackendResolver.new(
+config_writer_supervisor = Kontena::HaproxyConfigWriter.supervise
+backend_resolver_supervisor = Kontena::BackendResolver.supervise(
   backends: BACKENDS,
-  interval: POLLING_INTERVAL
+  interval: POLLING_INTERVAL,
+  autostart: true
 )
-resolver.async.start!
 
 sleep

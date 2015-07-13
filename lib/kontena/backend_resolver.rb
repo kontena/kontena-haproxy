@@ -11,15 +11,18 @@ module Kontena
       @interval = opts[:interval].to_i
       @backends = opts[:backends]
       @dns_resolver = Celluloid::IO::DNSResolver.new
+      async.start! if opts[:autostart]
     end
 
     def start!
       info "Starting to resolve ip's for backends: #{self.backends}"
       info "with interval of #{self.interval} seconds"
-      loop do
-        resolve_backends
-        sleep self.interval
-      end
+      defer {
+        loop do
+          resolve_backends
+          sleep self.interval
+        end
+      }
     end
 
     def resolve_backends

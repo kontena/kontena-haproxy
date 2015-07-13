@@ -6,7 +6,7 @@ describe Kontena::BackendResolver do
   after(:each) { Celluloid.shutdown }
 
   let(:subject) {
-    described_class.new(interval: 5, backends: ['mysql:3306']).wrapped_object
+    described_class.new(interval: 5, backends: ['mysql:3306'])
   }
 
   describe '.new' do
@@ -29,19 +29,18 @@ describe Kontena::BackendResolver do
 
   describe '#start!' do
     it 'calls #resolve_backends' do
-      expect(subject).to receive(:resolve_backends)
-      allow(subject).to receive(:resolve_dns)
+      expect(subject.wrapped_object).to receive(:resolve_backends)
+      allow(subject.wrapped_object).to receive(:resolve_dns)
         .with('mysql').and_return(['10.81.1.5'])
-      thread = Thread.new{ subject.start! }
+      subject.async.start!
       sleep 0.01
-      thread.kill
     end
   end
 
   describe '#resolve_backends' do
     it 'publishes resolved ips' do
-      expect(subject).to receive(:publish).with('backends_resolved', {'mysql' => [{ip: '10.81.1.5', port: '3306'}]})
-      allow(subject).to receive(:resolve_dns)
+      expect(subject.wrapped_object).to receive(:publish).with('backends_resolved', {'mysql' => [{ip: '10.81.1.5', port: '3306'}]})
+      allow(subject.wrapped_object).to receive(:resolve_dns)
         .with('mysql').and_return(['10.81.1.5'])
       subject.resolve_backends
     end
