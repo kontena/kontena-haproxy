@@ -20,9 +20,8 @@ RUN apt-get install -y haproxy ruby2.2 ruby2.2-dev build-essential ca-certificat
     apt-get autoremove -y --purge
 
 ADD . /app
-
+ENV BACKENDS=kontena-server-api:9292
 EXPOSE 80 443
-
 WORKDIR /app
 
 CMD ["./run.sh"]

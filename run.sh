@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export RUBY_GC_HEAP_GROWTH_FACTOR=1.1
 export RUBY_GC_MALLOC_LIMIT=4000100
