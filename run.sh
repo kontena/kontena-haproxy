@@ -16,8 +16,7 @@ if [ "${SSL_CERT}" = "**None**" ]; then
 fi
 
 if [ -n "$SSL_CERT" ]; then
-    echo -e "${SSL_CERT}" > /etc/haproxy/servercert.pem
-    export SSL="ssl crt /etc/haproxy/servercert.pem"
+    echo -e "${SSL_CERT}" > /etc/ssl/private/servercert.pem
 fi
 
 exec /app/bin/kontena-haproxy

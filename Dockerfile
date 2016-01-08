@@ -10,7 +10,7 @@ RUN echo 'deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main' >> 
 ADD Gemfile /app/
 ADD Gemfile.lock /app/
 
-RUN apt-get install -y haproxy ruby2.2 ruby2.2-dev build-essential ca-certificates libssl-dev && \
+RUN apt-get install -y haproxy ruby2.2 ruby2.2-dev build-essential ca-certificates libssl-dev curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     gem install bundler && \
@@ -19,6 +19,13 @@ RUN apt-get install -y haproxy ruby2.2 ruby2.2-dev build-essential ca-certificat
     apt-get clean && \
     apt-get autoremove -y --purge
 
+RUN curl -sL -o /tmp/acmetool-v0.0.23-linux_amd64.tar.gz https://github.com/hlandau/acme/releases/download/v0.0.23/acmetool-v0.0.23-linux_amd64.tar.gz && \
+    cd /tmp && tar zvxf acmetool-v0.0.23-linux_amd64.tar.gz && \
+    mv /tmp/acmetool-v0.0.23-linux_amd64/bin/acmetool /usr/bin/acmetool && \
+    mkdir -p /etc/acmetool && mkdir -p /var/lib/acme/conf && \
+    echo "provider: https://acme-v01.api.letsencrypt.org/directory" > /var/lib/acme/conf/target
+
+ADD acmetool/response-file.yml /etc/acmetool/response-file.yml
 ADD . /app
 ENV BACKENDS=kontena-server-api:9292
 EXPOSE 80 443

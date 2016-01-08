@@ -50,11 +50,14 @@ module Kontena
     def create_frontend
       frontend = []
       frontend << 'bind 0.0.0.0:%s' % options[:frontend_port]
-      if options[:ssl] != ''
-        frontend << 'redirect scheme https code 301 if !{ ssl_fc }'
-        frontend << 'bind 0.0.0.0:443 %s' % options[:ssl]
+      if has_certs?
+        frontend << 'redirect scheme https code 301 if !{ ssl_fc } !{ url_beg /.well-known/acme-challenge/ }'
+        frontend << 'bind 0.0.0.0:443 ssl crt /etc/ssl/private/'
         frontend << 'reqadd X-Forwarded-Proto:\ https'
       end
+
+      frontend << 'acl acme url_beg /.well-known/acme-challenge/'
+      frontend << 'use_backend acme if acme'
 
       if options[:virtual_hosts] != ''
         vhosts.each do |service, domain|
@@ -76,6 +79,10 @@ module Kontena
       else
         create_default_backend(backend_services)
       end
+
+      config['backend acme'] = [
+        'server acmetool 127.0.0.1:402'
+      ]
     end
 
     ##
@@ -134,6 +141,11 @@ module Kontena
         end
       end
       conf
+    end
+
+    # @return [Boolean]
+    def has_certs?
+      Dir.glob("/etc/ssl/private/*").size > 0
     end
   end
 end
