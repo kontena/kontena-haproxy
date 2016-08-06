@@ -2,34 +2,37 @@
 
 require_relative '../lib/kontena_haproxy'
 
-BACKENDS = ENV['BACKENDS'].to_s.split(',')
-FRONTEND_PORT = ENV['FRONTEND_PORT'] || '80'
-MODE = ENV['MODE'] || 'http'
-BALANCE = ENV['BALANCE'] || 'roundrobin'
-MAXCONN = ENV['MAXCONN'] || '4096'
-OPTION = (ENV['OPTION'] || 'redispatch, forwardfor').split(',')
-TIMEOUT = (ENV['TIMEOUT'] || 'connect 5000, client 50000, server 50000').split(',')
-SSL = ENV['SSL'] || ''
-POLLING_INTERVAL = (ENV['POLLING_INTERVAL'] || '10').to_i
-VIRTUAL_HOSTS = ENV['VIRTUAL_HOSTS'] || ''
+backends = ENV['BACKENDS'].to_s.split(',')
+frontend_port = ENV['FRONTEND_PORT'] || '80'
+mode = ENV['MODE'] || 'http'
+balance = ENV['BALANCE'] || 'roundrobin'
+maxconn = ENV['MAXCONN'] || '4096'
+option = (ENV['OPTION'] || 'redispatch, forwardfor').split(',')
+timeout = (ENV['TIMEOUT'] || 'connect 5000, client 50000, server 50000').split(',')
+polling_interval = (ENV['POLLING_INTERVAL'] || '10').to_i
+virtual_hosts = ENV['VIRTUAL_HOSTS'] || ''
+le_domains = ENV['LE_DOMAINS'].to_s.split(',')
+le_email = ENV['LE_EMAIL']
 
 Celluloid.logger.level = (ENV['LOG_LEVEL'] || '1').to_i
+if le_email && le_domains.size > 0
+  acme_supervisor = Kontena::AcmeWorker.supervise(le_email, le_domains)
+end
 spawner_supervisor = Kontena::HaproxySpawner.supervise
 config_generator_supervisor = Kontena::HaproxyConfigGenerator.supervise(
-  frontend_port: FRONTEND_PORT,
-  maxconn: MAXCONN,
-  mode: MODE,
-  balance: BALANCE,
-  option: OPTION,
-  timeout: TIMEOUT,
-  polling_interval: POLLING_INTERVAL,
-  virtual_hosts: VIRTUAL_HOSTS,
-  ssl: SSL
+  frontend_port: frontend_port,
+  maxconn: maxconn,
+  mode: mode,
+  balance: balance,
+  option: option,
+  timeout: timeout,
+  polling_interval: polling_interval,
+  virtual_hosts: virtual_hosts
 )
 config_writer_supervisor = Kontena::HaproxyConfigWriter.supervise
 backend_resolver_supervisor = Kontena::BackendResolver.supervise(
-  backends: BACKENDS,
-  interval: POLLING_INTERVAL,
+  backends: backends,
+  interval: polling_interval,
   autostart: true
 )
 
