@@ -39,12 +39,21 @@ module Kontena
     # @param [String] domain
     # @return [Boolean]
     def want_domain(domain)
-      success = system("#{ACME_CMD} want #{domain}")
-      if success
-        info "fetched cert for domain #{domain}"
-      else
-        sleep 10
-        raise "failed to fetch cert for domain #{domain}"
+      retries = 0
+      begin
+        success = system("#{ACME_CMD} want #{domain}")
+        if success
+          info "fetched cert for domain #{domain}"
+        else
+          retries += 1
+          raise "failed to fetch cert for domain #{domain}"
+        end
+      rescue => exc
+        info exc.message
+        wait = 10 * retries
+        info "retrying in #{wait} seconds"
+        sleep wait
+        retry
       end
     end
 
