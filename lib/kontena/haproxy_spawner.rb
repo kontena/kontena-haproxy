@@ -7,7 +7,7 @@ module Kontena
 
     ##
     # @param [String] config_file
-    def initialize(haproxy_bin = '/usr/sbin/haproxy', config_file = '/etc/haproxy/haproxy.cfg')
+    def initialize(haproxy_bin = '/usr/local/sbin/haproxy', config_file = '/etc/haproxy/haproxy.cfg')
       @current_pid = nil
       @haproxy_cmd = [haproxy_bin, '-f', config_file, '-db']
       subscribe 'haproxy:config_updated', :update_haproxy
