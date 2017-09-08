@@ -56,5 +56,10 @@ describe Kontena::BackendResolver do
       ips = subject.resolve_dns('www.google.com')
       expect(ips.size).to be > 1
     end
+
+    it 'returns passed value if dns does not resolve' do
+      ips = subject.resolve_dns('10.1.1.1')
+      expect(ips[0]).to eq('10.1.1.1')
+    end
   end
 end

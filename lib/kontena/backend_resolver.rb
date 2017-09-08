@@ -50,6 +50,8 @@ module Kontena
       resolved = dns_resolver.resolve(dns_name)
       if resolved.is_a?(Resolv::IPv4)
         [resolved]
+      elsif resolved.nil?
+        [dns_name]
       else
         resolved
       end
