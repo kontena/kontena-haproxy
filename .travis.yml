@@ -14,5 +14,5 @@ deploy:
   - provider: script
     script: "$TRAVIS_BUILD_DIR/build/latest.sh"
     on:
-      branch: travis
+      branch: master
       repo: kontena/kontena-haproxy
