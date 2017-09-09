@@ -1,0 +1,18 @@
+language: ruby
+sudo: required
+rvm:
+  - 2.2.6
+cache: bundler
+services:
+  - docker
+env:
+  global:
+    - secure: "QF7o8t+bIlImXijNGADzl814IyCrUPRj90f1QdDSfmrJ5CUvicrzQs7yJmsdzHOXLltF9KVep6FJzit9GzOmlceacoYtd+J6BvIpSEhKRQu214RvGyxpeu+lmWg3NN3NCscIjW5Znhe7wsR8K79zdXiNkqVHCtwW15CvfNE2YiOtlDRG0qDicu0L4wcHfYhBJEP2ptduPOHbbUPvrqwGQWT0zTNwYUMOBLruop+fR1Xrzu0asVqGO4yYNhRfPWpv63p3DK+bpCIbhnJuAWnI1HXlIy1BSS+ObzAYYf55LtoF7hnFTd4VwfKTsgNUr3YPGjsmxNB2sIirBiwTgmCRq62PEOSaO7gTKk81FfNbYobBJNI3fv1+ydwLRkQ4BgHRCFfEO24/2qyOTUnABdY8MkFIz7gEwXtdVBOXbGKgEGI0o68Yudf3kAkPT+1dkcktFHXwjTaiqe5lb8Y3RSPzXVuaS8LkHH5R188wfeP6hXYXnazKFZX3IIrwBMW44SW9edRXI5R2suvamEKOCY+BDx3vbaIERcMXz3T5sQVXAYEdb8gB+gVbKpHl2XwZPkbYr1+QfFmdok5YbOtzHm9MUoRbMTJyI7+8ssXs+T3UDsu3/s1qn9poXwShPx+7u3IvRsp9n8L3obb6WUtGx9ef6oJ4XSAm0r0B+NsT9wRJqUs=" # docker user
+    - secure: "rFUq0Bzouiohi9/gRg0/bRxeiRxOydbrbEFj455fwmJwnM616+TOL6U/LJKpZ0OCWaLjnOkiVi/z4tmVhdlN2mcXGtmtUp5Jk2BSCK6u9BX8L/pwylkEVhA+dC33tmOHk3qAiV1afZNlNw26pLJJhOdwU9kgsHmc0qPxW7M76Wz8udzD/xEb5640tFXJVgrgIr5BJeeeaWTx1I8EUrNSzAGgGgsCkmTFz105ouC6oLG3qs3WT8Vjw7OUAz+Qcn2xVjI5dq36OL+OxUx+Uz1SmEjW/RgNHsyeUCmsz9XutzlsfzmrzeMdU5F2wysfU2hh91yLAxPFJ28H+bJHQPPE8VSVVhz2gFGpgNdN8V55WYopR8J0Gu1xJC/BBh1FjIpkPzx114gLDuZVWn2gujcCpNp79r4HfAetqggRyKpD6djQOsKhNku4QvP5hDbpo2NeVenrpUeDcIf02JZqLe/+1bPeSCcoeYZGdZB9XtN+B5Euri1Mw96e0rQHcE2gsA6pajr4tBcSz5NQBMweznnUFPrENk50wDZuTCAusF9S3GqMZQk35oXEGDIg7qTQjVQAII5jFzZhWHcubzvN8A7ysKFEVsDcTYhrHU8ZcUt0YnAjeut/wLw5MxHLyZ2aYRhxt5Mq++GdA6+zAj0IKyZzFxIKwwImIHreI9mAX618Mx0=" # docker password
+script: bundle exec rspec spec/
+deploy:
+  - provider: script
+    script: "$TRAVIS_BUILD_DIR/build/latest.sh"
+    on:
+      branch: master
+      repo: kontena/kontena-haproxy
