@@ -1,0 +1,18 @@
+language: ruby
+sudo: required
+rvm:
+  - 2.2.6
+cache: bundler
+services:
+  - docker
+before_install:
+  - bundle install
+env:
+  global:
+script: bundle exec rspec spec/
+deploy:
+  - provider: script
+    script: "$TRAVIS_BUILD_DIR/build/latest.sh"
+    on:
+      branch: travis
+      repo: kontena/kontena-haproxy
