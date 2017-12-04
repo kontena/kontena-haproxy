@@ -1,7 +1,7 @@
 FROM ubuntu:trusty
 MAINTAINER Kontena, Inc. <info@kontena.io>
 
-ENV BACKENDS=kontena-server-api:9292 ACMETOOL_VERSION=0.0.54
+ENV BACKENDS=kontena-server-api:9292 ACMETOOL_VERSION=0.0.61
 
 RUN echo 'deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main' >> /etc/apt/sources.list && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0x80f70e11f0f0d5f10cb20e62f5da5f09c3173aa6 && \
