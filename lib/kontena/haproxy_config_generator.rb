@@ -18,8 +18,8 @@ module Kontena
       config['global'] = [
         "maxconn %s" % options[:maxconn],
         "pidfile /var/run/haproxy.pid",
-        "user haproxy",
-        "group haproxy",
+        "user nobody",
+        "group nobody",
         "daemon",
         "stats socket /var/run/haproxy.stats level admin"
       ]
