@@ -95,7 +95,7 @@ module Kontena
           service_name = service.gsub('.', '-')
           i = 1
           backend_services[service].each do |host|
-            backend << 'server %s %s:%s' % ["#{service_name}-#{i}", host[:ip], host[:port]]
+            backend << ['server', "#{service_name}-#{i}", "#{host[:ip]}:#{host[:port]}", options[:server_option]].reject(&:empty?).join(' ')
             i += 1
           end
           id = service.downcase.sub('-', '_')
@@ -113,7 +113,7 @@ module Kontena
         service_name = service.gsub('.', '-')
         i = 1
         hosts.each do |host|
-          backend << 'server %s %s:%s' % ["#{service_name}-#{i}", host[:ip], host[:port]]
+            backend << ['server', "#{service_name}-#{i}", "#{host[:ip]}:#{host[:port]}", options[:server_option]].reject(&:empty?).join(' ')
           i += 1
         end
       end
