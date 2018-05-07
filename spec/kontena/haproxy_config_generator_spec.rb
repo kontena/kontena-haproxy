@@ -14,6 +14,7 @@ describe Kontena::HaproxyConfigGenerator do
       polling_interval: 5,
       virtual_hosts: 'ghost=blog.kontena.io,jenkins=ci.kontena.io',
       option: %w{ redispatch forwardfor},
+      server_option: '',
       timeout: ['connect 5000', 'client 50000', 'server 50000']
     ).wrapped_object
   end

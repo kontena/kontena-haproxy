@@ -8,6 +8,7 @@ mode = ENV['MODE'] || 'http'
 balance = ENV['BALANCE'] || 'roundrobin'
 maxconn = ENV['MAXCONN'] || '4096'
 option = (ENV['OPTION'] || 'redispatch, forwardfor').split(',')
+server_option = ENV['SERVER_OPTION'] || ''
 timeout = (ENV['TIMEOUT'] || 'connect 5000, client 50000, server 50000').split(',')
 polling_interval = (ENV['POLLING_INTERVAL'] || '10').to_i
 virtual_hosts = ENV['VIRTUAL_HOSTS'] || ''
@@ -25,6 +26,7 @@ config_generator_supervisor = Kontena::HaproxyConfigGenerator.supervise(
   mode: mode,
   balance: balance,
   option: option,
+  server_option: server_option,
   timeout: timeout,
   polling_interval: polling_interval,
   virtual_hosts: virtual_hosts
