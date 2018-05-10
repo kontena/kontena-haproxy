@@ -13,6 +13,10 @@ polling_interval = (ENV['POLLING_INTERVAL'] || '10').to_i
 virtual_hosts = ENV['VIRTUAL_HOSTS'] || ''
 le_domains = ENV['LE_DOMAINS'].to_s.split(',')
 le_email = ENV['LE_EMAIL']
+health_check_port = ENV['HEALTH_CHECK_PORT'] || ''
+health_check_protocol = ENV['HEALTH_CHECK_PROTOCOL'] || ''
+health_check_interval = ENV['HEALTH_CHECK_INTERVAL'] || ''
+health_check_timeout = ENV['HEALTH_CHECK_TIMEOUT'] || ''
 
 Celluloid.logger.level = (ENV['LOG_LEVEL'] || '1').to_i
 if le_email && le_domains.size > 0

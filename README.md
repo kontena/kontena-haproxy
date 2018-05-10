@@ -16,6 +16,10 @@ HAProxy image that does load-balancing between configured addresses. HAProxy rec
 | POLLING_INTERVAL     | 10 | How often backend addresses are polled (resolved). |
 | VIRTUAL_HOSTS        |        | Comma separated list of virtual_host=backend mappings, for example app1=www.domain.com,app2=www.bar.com |
 | SSL_CERT             |        | Ssl cert, a pem file with private key followed by public certificate, '\n'(two chars) as the line separator. |
+| HEALTH_CHECK_PORT    |        |  |
+| HEALTH_CHECK_PROTOCOL    |        |  |
+| HEALTH_CHECK_INTERVAL    |        |  |
+| HEALTH_CHECK_TIMEOUT    |        |  |
 
 
 ## License

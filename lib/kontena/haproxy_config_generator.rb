@@ -109,11 +109,15 @@ module Kontena
     def create_default_backend(backend_services)
       backend = []
       backend << 'balance %s' % options[:balance]
+      if options[:health_check_port].empty?
+        health_check = ''
+      else
+        health_check = 'check port %s inter %ss' % [options[:health_check_port], options[:health_check_interval]]
       backend_services.each do |service, hosts|
         service_name = service.gsub('.', '-')
         i = 1
         hosts.each do |host|
-          backend << 'server %s %s:%s' % ["#{service_name}-#{i}", host[:ip], host[:port]]
+          backend << 'server %s %s:%s %s' % ["#{service_name}-#{i}", host[:ip], host[:port], health_check]
           i += 1
         end
       end
