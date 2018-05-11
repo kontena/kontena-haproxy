@@ -30,6 +30,10 @@ config_generator_supervisor = Kontena::HaproxyConfigGenerator.supervise(
   balance: balance,
   option: option,
   timeout: timeout,
+  health_check_port: health_check_port,
+  health_check_protocol: health_check_protocol,
+  health_check_interval: health_check_interval,
+  health_check_timeout: health_check_timeout,
   polling_interval: polling_interval,
   virtual_hosts: virtual_hosts
 )

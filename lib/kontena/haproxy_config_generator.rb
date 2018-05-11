@@ -113,6 +113,8 @@ module Kontena
         health_check = ''
       else
         health_check = 'check port %s inter %ss' % [options[:health_check_port], options[:health_check_interval]]
+      end
+      
       backend_services.each do |service, hosts|
         service_name = service.gsub('.', '-')
         i = 1
