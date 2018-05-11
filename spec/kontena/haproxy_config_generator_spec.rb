@@ -13,6 +13,10 @@ describe Kontena::HaproxyConfigGenerator do
       balance: 'roundrobin',
       polling_interval: 5,
       virtual_hosts: 'ghost=blog.kontena.io,jenkins=ci.kontena.io',
+      health_check_port: 27020,
+      health_check_protocol: 'tcp',
+      health_check_interval: 10,
+      health_check_timeout: 5,
       option: %w{ redispatch forwardfor},
       timeout: ['connect 5000', 'client 50000', 'server 50000']
     ).wrapped_object
