@@ -16,6 +16,7 @@ module Kontena
 
     def create_default_config
       config['global'] = [
+        "log /dev/log local1 info",
         "maxconn %s" % options[:maxconn],
         "pidfile /var/run/haproxy.pid",
         "user haproxy",
@@ -24,7 +25,9 @@ module Kontena
         "stats socket /var/run/haproxy.stats level admin"
       ]
       config['defaults'] = [
-        "mode %s" % options[:mode]
+        "mode %s" % options[:mode],
+        "log global",
+        "option httplog"
       ]
       if options[:option]
         options[:option].each do |option|

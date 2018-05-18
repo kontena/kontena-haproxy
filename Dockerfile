@@ -12,7 +12,7 @@ RUN echo 'deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main' >> 
 ADD Gemfile /app/
 ADD Gemfile.lock /app/
 
-RUN apt-get install -y haproxy ruby2.2 ruby2.2-dev build-essential ca-certificates libssl-dev curl && \
+RUN apt-get install -y haproxy ruby2.2 ruby2.2-dev build-essential ca-certificates libssl-dev curl socat && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     gem install bundler && \

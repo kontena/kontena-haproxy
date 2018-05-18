@@ -7,6 +7,9 @@ export RUBY_GC_MALLOC_LIMIT_GROWTH_FACTOR=1.1
 export RUBY_GC_MALLOC_LIMIT=16000100
 export RUBY_GC_OLDMALLOC_LIMIT_MAX=16000100
 
+# fake syslog
+socat UNIX-RECV:/dev/log,mode=666 STDOUT &
+
 if [ "${VIRTUAL_HOST}" = "**None**" ]; then
     unset VIRTUAL_HOST
 fi
